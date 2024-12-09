@@ -6,6 +6,7 @@ import Cart from "./components/Cart";
 
 function App() {
   const cart = useSelector((state) => state.cart);
+  console.log("Cart:", cart);
 
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
 

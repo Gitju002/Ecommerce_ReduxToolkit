@@ -12,6 +12,8 @@ const Cart = () => {
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
+  const totalCartItems = cart.reduce((total, item) => total + item.quantity, 0);
+
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
@@ -56,8 +58,13 @@ const Cart = () => {
             </div>
           ))}
           <div className="flex justify-between items-center pt-4 border-t">
-            <span className="font-semibold text-xl">Total:</span>
-            <span className="text-xl font-bold">${total.toFixed(2)}</span>
+            <span className="text-xl font-bold">Cart Items: {cart.length}</span>
+            <span className="text-xl font-bold">
+              Total Items Count: {totalCartItems}
+            </span>
+            <span className="text-xl font-bold">
+              Total Amount: ${total.toFixed(2)}
+            </span>
           </div>
         </div>
       )}
