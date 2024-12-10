@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../features/cart/cartSlice";
 import { fetchProducts } from "../features/products/productsSlice";
+import { Button } from "./Button";
+import { IoFilterOutline } from "react-icons/io5";
+import SelectBox from "./SelectBox";
 
 const ProductsList = () => {
   const dispatch = useDispatch();
@@ -32,66 +35,75 @@ const ProductsList = () => {
   }
 
   return (
-    <div className="p-4">
+    <div className="max-w-screen-xl mx-auto">
       <h2 className="text-2xl font-bold mb-4">Our Products</h2>
 
-      <div className="mb-4">
-        <label htmlFor="category" className="mr-2 font-semibold">
-          FIlter By Category:
+      <div className="mb-4 flex">
+        <label
+          htmlFor="category"
+          className="flex items-center gap-2 mr-2 font-semibold"
+        >
+          Filters <IoFilterOutline />
         </label>
-        <select
+        <SelectBox
+          options={categories.map((category) => ({
+            value: category,
+            label: category,
+          }))}
+          size="small"
+          variant="outline"
+          width="w-auto"
           id="category"
+          placeholder="Hello"
           value={selectedCategory}
           onChange={(e) => {
             setSelectedCategory(e.target.value);
           }}
-          className="border border-gray-300 rounded p-2"
-        >
-          {categories.map((category) => (
-            <option key={category} value={category}>
-              {category.charAt(0).toUpperCase() + category.slice(1)}
-            </option>
-          ))}
-        </select>
+          className="border border-gray-300 rounded p-2 capitalize"
+        ></SelectBox>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4 container mx-auto ">
         {filteredProducts.map((product) => (
           <div
             key={product.id}
-            className="border border-gray-300 rounded p-4 flex flex-col justify-between"
+            className="cart-bg-primary rounded-lg border-2 border-transparent hover:border-white hover:shadow-xl transition-all duration-200 p-4 flex flex-col justify-between"
           >
             <img
               src={product.image}
               alt={product.title}
-              className="h-48 object-cover mb-2"
+              className="bg-white h-64 object-contain mb-2 rounded-2xl"
             />
-            <h2 className="text-lg font-semibold">{product.title}</h2>
-            <p className="text-sm text-gray-600 my-2">{product.description}</p>
-            <p className="font- text-blue-500">
-              <span className="font-semibold text-md text-black">
-                Category:
-              </span>{" "}
-              {product.category}
+            <h2 className="text-sm font-semibold">
+              {product.title.length > 40
+                ? product.title.slice(0, 40) + "..."
+                : product.title}
+            </h2>
+            <p className="text-xs text-gray-600 my-2">
+              {product.description.length > 80
+                ? product.description.slice(0, 80) + "..."
+                : product.description}
             </p>
-            <div className="flex items-center justify-between my-2">
-              <span className="text-xl font-bold">${product.price}</span>
-              <button
-                onClick={() => dispatch(addToCart(product))}
-                className="bg-indigo-600 text-white py-1 px-3 rounded hover:bg-indigo-500"
-              >
-                Add to Cart
-              </button>
-            </div>
-            <div className="flex items-center justify-between space-x-2">
-              <span className="text-sm text-gray-600 flex items-center">
+            <div className="flex items-center justify-start space-x-2">
+              <span className="text-xs text-gray-600 flex items-center">
                 {Array.from({ length: 5 }, (_, i) => {
                   const roundedRating = Math.round(product.rating.rate);
                   return <span key={i}>{i < roundedRating ? "⭐" : "☆"}</span>;
                 })}
               </span>
               <span className="text-sm text-gray-600">
-                {product.rating.count} reviews
+                ({product.rating.count})
               </span>
+              <span>Category:</span>
+            </div>
+            <div className="flex items-center justify-between my-2">
+              <span className="text-xl font-bold">${product.price}</span>
+              <Button
+                onClick={() => dispatch(addToCart(product))}
+                variant="outline"
+                className="hover:bg-black hover:text-white"
+              >
+                Add to Cart
+              </Button>
             </div>
           </div>
         ))}
