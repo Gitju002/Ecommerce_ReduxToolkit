@@ -5,6 +5,7 @@ import { fetchProducts } from "../features/products/productsSlice";
 import { Button } from "./Button";
 import { IoFilterOutline } from "react-icons/io5";
 import SelectBox from "./SelectBox";
+import { showSuccessToast } from "@/utils/toast";
 
 const ProductsList = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,11 @@ const ProductsList = () => {
   if (error) {
     return <div className="p-4 text-red-600">Error: {error}</div>;
   }
+
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
+    showSuccessToast("Product added to cart!");
+  };
 
   return (
     <div className="max-w-screen-xl mx-auto">
@@ -66,12 +72,12 @@ const ProductsList = () => {
         {filteredProducts.map((product) => (
           <div
             key={product.id}
-            className="cart-bg-primary rounded-lg border-2 border-transparent hover:border-white hover:shadow-xl transition-all duration-200 p-4 flex flex-col justify-between"
+            className=" p-4 flex flex-col justify-between bg-white rounded-lg border-2 border-transparent hover:border-red-100 hover:shadow-xl hover:shadow-red-300/10 transition-all duration-200"
           >
             <img
               src={product.image}
               alt={product.title}
-              className="bg-white h-64 object-contain mb-2 rounded-2xl"
+              className="bg-white h-64 object-contain p-4 mb-2 rounded-2xl border border-red-100"
             />
             <h2 className="text-sm font-semibold">
               {product.title.length > 40
@@ -93,12 +99,11 @@ const ProductsList = () => {
               <span className="text-sm text-gray-600">
                 ({product.rating.count})
               </span>
-              <span>Category:</span>
             </div>
             <div className="flex items-center justify-between my-2">
               <span className="text-xl font-bold">${product.price}</span>
               <Button
-                onClick={() => dispatch(addToCart(product))}
+                onClick={() => handleAddToCart(product)}
                 variant="outline"
                 className="hover:bg-black hover:text-white"
               >

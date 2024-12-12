@@ -5,7 +5,7 @@ import { Button } from "./Button";
 
 export default function Footer() {
   return (
-    <footer className=" mt-8 bg-gray-100 pt-16 pb-8 rounded-tl-[100px] rounded-tr-[100px]">
+    <footer className="  bg-gray-100 pt-16 pb-8 rounded-t-[100px] shadow-inner shadow-zinc-200">
       <div className="max-w-screen-xl mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 gap-8">
           {/* Company Info */}
@@ -71,7 +71,7 @@ export default function Footer() {
                 <Button
                   type="submit"
                   size="sm"
-                  className=" absolute right-1 bg-black text-white"
+                  className=" absolute right-1 !bg-black text-white"
                 >
                   Subscribe
                 </Button>

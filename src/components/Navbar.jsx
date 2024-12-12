@@ -1,21 +1,28 @@
-import React from "react";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { routes } from "../routes";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "./Button";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { GoArrowUpRight } from "react-icons/go";
-import { FaAngleRight, FaShopify } from "react-icons/fa";
+import { FaShopify } from "react-icons/fa";
+import MiniCart from "./MiniCart";
+import { toggleCart } from "../features/cart/cartToggle";
 
 const Navbar = () => {
   const cart = useSelector((state) => state.cart);
+  const cartIsOpen = useSelector((state) => state.toggleCart.isOpen);
 
-  const [cartVisible, setCartVisible] = useState(false);
+  const location = useLocation();
 
-  const toggleCart = () => {
-    setCartVisible(!cartVisible);
-  };
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (cartIsOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  }, [cartIsOpen]);
 
   return (
     <>
@@ -40,79 +47,27 @@ const Navbar = () => {
           </ul>
         </nav>
         <div className="relative flex items-center gap-x-4">
-          <Button>
+          <Button className="text-white">
             Contact Us
             <GoArrowUpRight />
           </Button>
-          <Button
-            variant="outline"
-            className="!rounded-full relative"
-            size="icon"
-            onClick={toggleCart}
-          >
-            <HiOutlineShoppingCart className="w-5 h-5" />
-            {cart.length > 0 && (
-              <div className="flex items-center justify-center bg-red-500 rounded-full w-5 h-5 text-white text-xs absolute top-0 right-0 transform translate-x-2 -translate-y-2">
-                {cart.length}
-              </div>
-            )}
-          </Button>
-          {cartVisible && (
-            <div className="absolute right-0 top-14 h-96  w-96 bg-slate-50 rounded-md overflow-y-auto no-scrollbar shadow-md shadow-slate-700/10">
-              <h2 className="p-6 text-lg font-medium">Your Cart</h2>
-              <div className="mx-6 border-t-2 border-gray-200"></div>
-              {cart.map((item) => (
-                <div key={item.id} className="p-6 flex flex-col items-start">
-                  <div className="flex items-center gap-x-4 justify-between">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="bg-white h-28 w-20 object-contain rounded-md "
-                    />
-                    <div className="flex flex-col gap-y-2">
-                      <h3 className="text-sm font-semibold text-gray-800">
-                        {item.title}
-                      </h3>
-                      <h3 className="text-xs font-light text-gray-800">
-                        Category:{" "}
-                        <span className="text-sm font-semibold tracking-tight">
-                          {item.category}
-                        </span>
-                      </h3>
-                      <div className="flex  items-baseline gap-x-2">
-                        <span className="text-lg font-semibold text-gray-800">
-                          ${item.price} x
-                        </span>
-                        <div className=" text-black text-xs flex items-center justify-center">
-                          {item.quantity > 9
-                            ? item.quantity
-                            : `0${item.quantity}`}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-              {cart.length === 0 && (
-                <p className="p-6 text-center text-gray-500">
-                  Your cart is empty.
-                </p>
-              )}
-              <Link
-                to="/cart"
-                className="flex items-center justify-center mb-6"
+          {location.pathname !== "/cart" &&
+            location.pathname !== "/checkout" && (
+              <Button
+                variant="outline"
+                className="!rounded-full relative"
+                size="icon"
+                onClick={() => dispatch(toggleCart())}
               >
-                <Button
-                  className="!bg-black text-white"
-                  size="lg"
-                  onClick={() => setCartVisible(false)}
-                >
-                  Go to Cart
-                  <FaAngleRight />
-                </Button>
-              </Link>
-            </div>
-          )}
+                <HiOutlineShoppingCart className="w-5 h-5" />
+                {cart.length > 0 && (
+                  <div className="flex items-center justify-center bg-red-500 rounded-full w-5 h-5 text-white text-xs absolute top-0 right-0 transform translate-x-2 -translate-y-2">
+                    {cart.length}
+                  </div>
+                )}
+              </Button>
+            )}
+          {cartIsOpen && <MiniCart />}
         </div>
       </header>
     </>

@@ -6,9 +6,8 @@ const buttonVariants = (variant, size) => {
 
   const variantClasses = {
     default:
-      "bg-white rounded-full text-primary-foreground hover:bg-primary/90",
-    destructive:
-      "bg-destructive  rounded-full text-destructive-foreground hover:bg-destructive/90",
+      "bg-black text-white rounded-full hover:bg-slate-700 font-light tracking-tight",
+    destructive: "bg-red-600  rounded-full text-white hover:bg-red-700",
     outline:
       "border  rounded-full border-gray-600 bg-background hover:bg-accent hover:text-accent-foreground",
     secondary:
